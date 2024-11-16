@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="PercentageRandomGeneratorTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-11-16T11:38:32" hostname="LAPTOP-0BIHNAOP" time="0.039">
+  <properties/>
+  <testcase name="shouldNeverReturnNullWhenNullNotProvidedInResultTable()" classname="PercentageRandomGeneratorTest" time="0.02"/>
+  <testcase name="shouldThrowIllegalArgumentExceptionWhenValidatingChanceBelowZero()" classname="PercentageRandomGeneratorTest" time="0.008"/>
+  <testcase name="shouldValidateChanceEqualToHundred()" classname="PercentageRandomGeneratorTest" time="0.002"/>
+  <testcase name="shouldThrowIllegalArgumentExceptionWhenValidatingChanceExceedsHundred()" classname="PercentageRandomGeneratorTest" time="0.002"/>
+  <testcase name="shouldThrowIllegalArgumentExceptionWhenValidatingChanceBelowHundred()" classname="PercentageRandomGeneratorTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
