@@ -1,6 +1,8 @@
 package generators;
 
-import java.util.Map;
+import data.ChanceEntry;
+
+import java.util.List;
 
 public class PercentageRandomGenerator<T> extends AbstractRandomGenerator<T>{
     private static final float EPSILON = 0.000001f;
@@ -9,12 +11,11 @@ public class PercentageRandomGenerator<T> extends AbstractRandomGenerator<T>{
     private static final String CHANCE_PERCENT_OVER_HUNDRED_MESSAGE = "total chance needs to be exactly 100%%. Provided: %.5f%%";
     private static final String NEGATIVE_PERCENT_CHANCE_ENCOUNTERED_MESSAGE = "chance cannot be negative. For item '%s' chance provided was: %.5f%%";
 
-    protected final Map<Float, T> resultsByChance;
+    protected final List<ChanceEntry<T>> resultsByChance;
     /***
      * returns T based on chances provided. total chance cannot exceed 100%.
-     * If chances are less than 100%, null can be returned as result
      */
-    public PercentageRandomGenerator(Map<Float,T> resultsByChance){
+    public PercentageRandomGenerator(List<ChanceEntry<T>> resultsByChance){
         validateResultsByChance(resultsByChance);
         this.resultsByChance = resultsByChance;
     }
@@ -24,9 +25,9 @@ public class PercentageRandomGenerator<T> extends AbstractRandomGenerator<T>{
         var lowerBound = 0f;
         var randomFloat = random.nextFloat();
         T currentItem = null;
-        for(Map.Entry<Float, T> entry : resultsByChance.entrySet()){
-            var normalizedItemProbability = entry.getKey()*NORMALIZATION_COEFFICIENT;
-            currentItem = entry.getValue();
+        for(final var entry : resultsByChance){
+            var normalizedItemProbability = entry.getChance()*NORMALIZATION_COEFFICIENT;
+            currentItem = entry.getItem();
             if(randomFloat >= lowerBound && randomFloat <= lowerBound + normalizedItemProbability){
                 return currentItem;
             }
@@ -35,11 +36,12 @@ public class PercentageRandomGenerator<T> extends AbstractRandomGenerator<T>{
         return currentItem;
     }
 
-    public static <T> void validateResultsByChance(Map<Float, T> resultsByChance){
+    private void validateResultsByChance(List<ChanceEntry<T>> resultsByChance){
         float totalProbability = 0f;
-        for (Float probability : resultsByChance.keySet()) {
+        for (final var chanceEntry : resultsByChance) {
+            float probability = chanceEntry.getChance();
             if (probability < 0) {
-                throw new IllegalArgumentException(String.format(NEGATIVE_PERCENT_CHANCE_ENCOUNTERED_MESSAGE,resultsByChance.get(probability),probability));
+                throw new IllegalArgumentException(String.format(NEGATIVE_PERCENT_CHANCE_ENCOUNTERED_MESSAGE,chanceEntry.getItem(),probability));
             }
             totalProbability += probability;
         }
